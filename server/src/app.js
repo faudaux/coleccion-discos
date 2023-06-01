@@ -1,14 +1,12 @@
 const express = require('express')
-const albumsdb = require('../config/db')
 const app = express()
 const PORT = 3000
+const albums = require('./routes/albums')
+const artists = require('./routes/artists')
 
-// connect to database
-albumsdb.connect()
-.then(() => console.log("Connected to database"))
-.catch(err => console.log(err))
-
-
+// middlewares
+app.use('/albums', albums)
+app.use('/artists', artists)
 
 // set up port
 app.listen(PORT, (err) => {
