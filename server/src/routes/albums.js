@@ -4,10 +4,11 @@ const db = require('../config/db')
 
 albumsRouter.route('/')
 .get((_req, res) => {
-    db.any('SELECT * FROM "user"."Albums"')
+    db.any('SELECT album_title FROM albums')
     .then(data => {
         res.send(data)
     })
+    .catch(err => console.log(err))
 })
 
 albumsRouter.route('/:id')

@@ -1,4 +1,7 @@
-const pgp = require('pg-promise')()
+const initOptions = {
+    schema: 'user'
+}
+const pgp = require('pg-promise')(initOptions)
 
 // database connection options
 const cn = {
