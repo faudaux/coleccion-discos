@@ -9,7 +9,7 @@
 export default {
     data() {
         return {
-            artist_name: null
+            artist_name: null 
         }
     }
 }
