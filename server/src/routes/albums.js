@@ -10,13 +10,26 @@ albumsRouter.route('/')
     })
     .catch(err => console.log(err))
 })
+.post((req, res) => {
+    let albumTitle = req.query.title,
+    artistName = req.query.artist, 
+    artistId
 
-albumsRouter.route('/:id')
-.post((req, _res) => {
-    albumId = req.query.id
-    albumTitle = req.query.title
-    albumArtist = req.query.artist
+    db.oneOrNone('SELECT artist_id FROM artists WHERE artist_name = $1', [artistName])
+    .then(data => artistId = data)
+    .catch(err => console.log(err))
+
+    db.none('INSERT INTO albums (album_title, artist_id) VALUES ($1, $2)', [albumTitle, artistId])
+    .then(() => res.send("success"))
+    .catch((err) => console.log(err))
 })
+
+albumsRouter.route('/:album_id')
+.get((req, res) =>{
+    let albumId = req.params.album_id
+    db.one('SELECT (album_name, ')
+})
+
 .get((req, _res) => {
     albumId = req.params.id
 })
