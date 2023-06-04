@@ -8,7 +8,7 @@ artistsRouter.use('/:artist_id/albums', albumsRoute)
 artistsRouter.route('/')
 // get all artists 
 .get((_req, res) => {
-    db.any('SELECT artist_name FROM artists')
+    db.any('SELECT * FROM artists')
     .then(data => {
         res.send(data)
     })
@@ -27,7 +27,7 @@ artistsRouter.route('/:artist_id')
 .get((req, res) => {
     let artistId = req.params.artist_id
     db.oneOrNone('SELECT artist_name FROM artists WHERE artist_id = $1', [artistId])
-    .then(data => res.send(data))
+    .then((data) => res.send(data))
     .catch(err => console.log(err))
 })
 // modify artist
@@ -35,7 +35,7 @@ artistsRouter.route('/:artist_id')
     let artistId = req.params.artist_id
     let artistName = req.query.name
     db.none('UPDATE artists SET artist_name = $1 WHERE artist_id = $2', [artistName, artistId])
-    .then(() => res.send("Success"))
+    .then(() => res.send('success'))
     .catch((err) => console.log(err))
 })
 // delete artist
