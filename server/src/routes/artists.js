@@ -3,7 +3,6 @@ const albumsRoute = require('./albums')
 const artistsRouter = express.Router()
 const db = require('../config/db')
 
-artistsRouter.use('/:artist_id/albums', albumsRoute)
 
 artistsRouter.route('/')
 // get all artists 

@@ -25,7 +25,7 @@ albumsRouter.route('/')
 albumsRouter.route('/:album_id')
 .get((req, res) =>{
     let albumId = req.params.album_id
-    db.one('SELECT album_title, artist_name FROM albums JOIN artists WHERE album_id = $1', [albumId])
+    db.oneOrNone('SELECT album_title, artist_name FROM albums, artists WHERE album_id = $1', [albumId])
     .then(data => res.send(data))
 })
 .put((req, _res) => {
@@ -34,7 +34,7 @@ albumsRouter.route('/:album_id')
     ,artistName = req.query.artist_name
     db.one('SELECT artist_id FROM artists WHERE artist_name=$1', [artistName])
     .then(aId => {
-        db.none('UPDATE albums SET album_title=$1, artist_id=$2 WHERE album_id=$3',[albumTitle, albumId, aId])
+        db.none('UPDATE albums SET album_title=$1, artist_id=$2 WHERE album_id=$3',[albumTitle, aId.artist_id, albumId])
     })
 })
 .delete((req, _res) => {
