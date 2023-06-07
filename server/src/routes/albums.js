@@ -9,6 +9,7 @@ albumsRouter.route('/')
         return await t.any('SELECT album_id, album_title, artist_name FROM artists, albums')
     })
     .then((data) => res.send(data))
+    .catch(err => res.send(err))
 })
 .post((req, res) => {
     let albumTitle = req.query.album_title,
@@ -20,6 +21,7 @@ albumsRouter.route('/')
         db.none('INSERT INTO albums (album_title, artist_id) VALUES ($1, $2)', [albumTitle, aId.artist_id])
     })
     .then(() => res.send('success'))
+    .catch(err => res.send(err))
 })
 
 albumsRouter.route('/:album_id')
@@ -27,8 +29,9 @@ albumsRouter.route('/:album_id')
     let albumId = req.params.album_id
     db.oneOrNone('SELECT album_title, artist_name FROM albums, artists WHERE album_id = $1', [albumId])
     .then(data => res.send(data))
+    .catch(err => res.send(err))
 })
-.put((req, _res) => {
+.put((req, res) => {
     let albumId = req.params.album_id
     ,albumTitle = req.query.album_title
     ,artistName = req.query.artist_name
@@ -36,10 +39,12 @@ albumsRouter.route('/:album_id')
     .then(aId => {
         db.none('UPDATE albums SET album_title=$1, artist_id=$2 WHERE album_id=$3',[albumTitle, aId.artist_id, albumId])
     })
+    .catch(err => res.send(err))
 })
-.delete((req, _res) => {
+.delete((req, res) => {
     let albumId = req.params.album_id
     db.none('DELETE FROM albums WHERE album_id = $1', [albumId])
+    .catch(err => res.send(err))
 })
 
 
