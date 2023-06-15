@@ -2,10 +2,7 @@ const express = require('express')
 const app = express()
 const usersRouter = express.Router()
 const db = require('../config/db')
-const collectionsRouter = require('./collections')
 
-// every user is connected to a single collection and viceversa
-app.use('/users/:user_id/collection', collectionsRouter)
 
 usersRouter.route('/')
 // get all users
@@ -43,6 +40,25 @@ usersRouter.route('/:user_id')
     userId = req.params.user_id
     db.none('DELETE FROM users WHERE user_id = $1', userId)
     .then(() => res.redirect('/users'))
+    .catch(err => res.send(err))
+})
+
+
+// every user is connected to a single collection and viceversa
+usersRouter.route('/:user_id/collection')
+.get((req, res) => {
+    let userId = req.params.user_id
+    db.each('SELECT album_id FROM collections WHERE user_id = $1', userId, (row) => {
+        return db.one('SELECT album_title FROM albums WHERE $1', row)
+    })
+    .then(data = res.send(data))
+    .catch(err => res.send(err))
+})
+.post((req, res) => {
+    let userId = req.params.user_id
+    let albumId = req.query.album_id
+    db.none('INSERT INTO collections (user_id, album_id) VALUES ($1,$2)', [userId, albumId])
+    .then(() => res.redirect('/'))
     .catch(err => res.send(err))
 })
 
