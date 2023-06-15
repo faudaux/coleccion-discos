@@ -3,8 +3,8 @@
 
 
 // eslint-disable-next-line no-unused-vars
-async function makeRequest (url, method, _query) {
-    return fetch(url, {method: method})
+async function makeRequest (url, method, query) {
+    return fetch(url + new URLSearchParams(query), {method: method})
     .then(data => data.json())
 }
 
