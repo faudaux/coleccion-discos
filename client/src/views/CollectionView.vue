@@ -1,9 +1,9 @@
 <template>
   <div v-if="dataReady">
     <ul>
-        <li>
+        <li v-for="infoItem in collectionInfo" :key="infoItem">
             <h3>
-              {{  }}
+              {{ infoItem.album_title }}
             </h3>
         </li>
     </ul>
@@ -23,7 +23,7 @@ export default {
 
   },
   mounted() {
-    makeRequest('api/users/' + this.$route.params.user_id + '/collections', 'get')
+    makeRequest('/api/users/' + this.$route.params.user_id + '/collection', 'get')
     .then(data => this.collectionInfo = data)
     .then(() => this.dataReady = true)
     .catch((err) => console.log(err))

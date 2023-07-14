@@ -23,7 +23,7 @@ usersRouter.route('/:user_id')
 // get a single user
 .get((req, res) => {
     let userId = req.params.user_id
-    db.oneOrNone('SELECT user_name, collection_id FROM users WHERE user_id = $1', userId)
+    db.oneOrNone('SELECT user_name FROM users WHERE user_id = $1', userId)
     .then(user => res.send(user))
     .catch(err => res.send(err))
 })
@@ -48,11 +48,10 @@ usersRouter.route('/:user_id')
 usersRouter.route('/:user_id/collection')
 .get((req, res) => {
     let userId = req.params.user_id
-    db.each('SELECT album_id FROM collections WHERE user_id = $1', userId, (row) => {
-        return db.one('SELECT album_title FROM albums WHERE $1', row)
-    })
-    .then(data = res.send(data))
-    .catch(err => res.send(err))
+    db.any(
+        'SELECT collections.album_id, album_title FROM collections, albums WHERE user_id = $1 AND collections.album_id = albums.album_id'
+        , [userId])
+    .then(data => res.send(data))
 })
 .post((req, res) => {
     let userId = req.params.user_id
