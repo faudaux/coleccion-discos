@@ -1,4 +1,5 @@
 # coleccion-discos
+API for a fictional record collection
 
 ## /artists:
 GET: get all artists
