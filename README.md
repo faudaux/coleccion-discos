@@ -1,4 +1,4 @@
-# coleccion-discos
+# record-collection
 API for a fictional record collection
 
 ## /artists:
